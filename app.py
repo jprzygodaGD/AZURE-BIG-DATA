@@ -1,5 +1,6 @@
 import argparse
 from generate_json import GenerateJSON, JSONPersistence
+from store_in_azure import upload_blob_file
 
 
 def collect_args():
@@ -14,8 +15,15 @@ def collect_args():
 
 
 if __name__ == "__main__":
+    # generate file and save it on the local system
     file_writer = JSONPersistence(collect_args())
     file_writer.save_lines_to_file()
+
+    # move file to Azure blob storage
+    path = file_writer.return_file_path()
+    name = file_writer.return_file_name()
+    upload_blob_file(path, name)
+
 
 
 

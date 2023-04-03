@@ -3,6 +3,7 @@ import json
 from faker import Faker
 import uuid
 import random
+import os
 
 
 class GenerateJSON:
@@ -63,6 +64,15 @@ class JSONPersistence(GenerateJSON):
                 json_data_list.append(line)
 
             json.dump(json_data_list, current_opened_file)
+
+    def return_file_name(self):
+        return self.file_name + ".json"
+
+    @staticmethod
+    def return_file_path():
+        current_directory = os.getcwd()
+        return current_directory
+
 
 
 
