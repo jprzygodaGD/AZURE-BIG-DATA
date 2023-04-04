@@ -4,9 +4,10 @@ from faker import Faker
 import uuid
 import random
 import os
+import csv
 
 
-class GenerateJSON:
+class GenerateDict:
     """Class that generates social media data in JSON format. """
 
     def __init__(self, args: argparse.Namespace):
@@ -47,11 +48,11 @@ class GenerateJSON:
         return suspicious_data
 
 
-class JSONPersistence(GenerateJSON):
+class JSONPersistence(GenerateDict):
     def __init__(self, args):
         super().__init__(args)
 
-    def save_lines_to_file(self):
+    def save_json(self):
         json_data_list = list()
 
         with open(f"{self.file_name}.json", "w") as current_opened_file:
@@ -68,10 +69,29 @@ class JSONPersistence(GenerateJSON):
     def return_file_name(self):
         return self.file_name + ".json"
 
-    @staticmethod
-    def return_file_path():
-        current_directory = os.getcwd()
-        return current_directory
+
+class CSVPersistence(GenerateDict):
+    def __init__(self, args):
+        super().__init__(args)
+
+    def save_csv(self):
+
+        with open(f"{self.file_name}.csv", "w") as current_opened_file:
+
+            writer = csv.writer(current_opened_file)
+
+            for j in range(int(self.row_count * 0.9)):
+                line = self.generate_regular_line()
+                line_values = [str(_) for _ in line.values()]
+                writer.writerow(line_values)
+
+            for k in range(int(self.row_count * 0.1)):
+                line = self.generate_regular_line()
+                line_values = [str(_) for _ in line.values()]
+                writer.writerow(line_values)
+
+    def return_file_name(self):
+        return self.file_name + ".csv"
 
 
 
